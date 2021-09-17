@@ -1,17 +1,103 @@
 package com.example.moviesapp.data.source
 
-import com.example.moviesapp.data.Movie
-import com.example.moviesapp.data.MovieOverview
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.example.moviesapp.data.*
+import com.example.moviesapp.data.source.database.MoviesDatabase
+import com.example.moviesapp.data.source.database.asDomainModel
 import com.example.moviesapp.data.source.network.MoviesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MoviesRepository {
-    suspend fun getMovie(id: String): Movie = MoviesApi.retrofitService.getMovie(id)
+enum class MoviesCategories {
+    LATEST, NOW_PLAYING, TOP_RATED, POPULAR
+}
 
-    suspend fun getLatest(): List<MovieOverview> = MoviesApi.retrofitService.getLatest().results
+private val movieCategoryToString = mapOf(
+    MoviesCategories.LATEST to LATEST,
+    MoviesCategories.NOW_PLAYING to NOW_PLAYING,
+    MoviesCategories.TOP_RATED to TOP_RATED,
+    MoviesCategories.POPULAR to POPULAR
+)
 
-    suspend fun getNowPlaying(): List<MovieOverview> = MoviesApi.retrofitService.getNowPlaying().results
+class MoviesRepository(private val database: MoviesDatabase) {
 
-    suspend fun getPopular(): List<MovieOverview> = MoviesApi.retrofitService.getPopular().results
+    val latest: LiveData<List<MovieOverview>> = Transformations.map(
+        database.moviesDao.getMovieOverviews(LATEST)
+    ) {
+        it.asDomainModel()
+    }
 
-    suspend fun getTopRated(): List<MovieOverview> = MoviesApi.retrofitService.getTopRated().results
+    val nowPlaying: LiveData<List<MovieOverview>> = Transformations.map(
+        database.moviesDao.getMovieOverviews(NOW_PLAYING)
+    ) {
+        it.asDomainModel()
+    }
+
+    val popular: LiveData<List<MovieOverview>> = Transformations.map(
+        database.moviesDao.getMovieOverviews(POPULAR)
+    ) {
+        it.asDomainModel()
+    }
+
+    val topRated: LiveData<List<MovieOverview>> = Transformations.map(
+        database.moviesDao.getMovieOverviews(TOP_RATED)
+    ) {
+        it.asDomainModel()
+    }
+
+    val favourites: LiveData<List<MovieOverview>> = Transformations.map(
+        database.moviesDao.getFavourites()
+    ) {
+        it.asDomainModel()
+    }
+
+    suspend fun getMovie(id: Int): Movie = MoviesApi.retrofitService.getMovie(id)
+
+    suspend fun addToFavourites(movie: Movie) {
+        withContext(Dispatchers.IO) {
+            database.moviesDao.insertMovie(movie.asDatabaseModel())
+        }
+    }
+
+    suspend fun isFavourite(movieId: Int): Boolean {
+        var result = false
+        withContext(Dispatchers.IO) {
+            val movieFromDb = database.moviesDao.getMovie(movieId)
+            if (movieFromDb != null) result = true
+        }
+
+        return result
+    }
+
+    suspend fun deleteFromFavourites(movie: Movie) {
+        withContext(Dispatchers.IO) {
+            database.moviesDao.deleteMovie(movie.id)
+        }
+    }
+
+    suspend fun getCategory(category: MoviesCategories): Boolean {
+
+        var success = false
+        withContext(Dispatchers.IO) {
+            try {
+                val movies = when (category) {
+                    MoviesCategories.LATEST -> MoviesApi.retrofitService.getLatest().results
+                    MoviesCategories.NOW_PLAYING -> MoviesApi.retrofitService.getNowPlaying().results
+                    MoviesCategories.TOP_RATED -> MoviesApi.retrofitService.getTopRated().results
+                    MoviesCategories.POPULAR -> MoviesApi.retrofitService.getPopular().results
+                }
+
+                if (movies.isNotEmpty()) {
+                    database.moviesDao.clearMovieOverviews(movieCategoryToString[category]!!)
+                    database.moviesDao.insertMovieOverviews(
+                        *movies.asDatabaseModel(movieCategoryToString[category]!!)
+                    )
+                    success = true
+                }
+            } catch (t: Throwable) {}
+        }
+
+        return success
+    }
 }

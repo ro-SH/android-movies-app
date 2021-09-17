@@ -3,23 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/home_fragment">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/home_fragment"
         android:name="com.example.moviesapp.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/actionShowMovieDetails"
-            app:destination="@id/movieDetailsFragment" />
+            app:destination="@id/movie_details_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.moviesapp.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/favourites_fragment"
+        android:name="com.example.moviesapp.ui.favourites.FavouritesFragment"
+        android:label="@string/title_favourites"
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/actionShowMovieDetails"
+            app:destination="@id/movie_details_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -27,9 +31,9 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
-        android:id="@+id/movieDetailsFragment"
+        android:id="@+id/movie_details_fragment"
         android:name="com.example.moviesapp.ui.movie_details.MovieDetailsFragment"
-        android:label="fragment_movie_details"
+        android:label="@string/title_movie_details"
         tools:layout="@layout/fragment_movie_details" >
         <argument
             android:name="movieId"

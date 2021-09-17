@@ -28,12 +28,31 @@ class MovieDetailsFragment : Fragment() {
     ): View {
 
         val movieId = MovieDetailsFragmentArgs.fromBundle(requireArguments()).movieId
-        val viewModelFactory = MovieDetailsViewModelFactory(movieId)
+        val viewModelFactory = MovieDetailsViewModelFactory(requireActivity().application, movieId)
 
         movieDetailsViewModel =
             ViewModelProvider(this, viewModelFactory).get(MovieDetailsViewModel::class.java)
 
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        movieDetailsViewModel.favourite.observe(
+            viewLifecycleOwner,
+            {
+                if (mMenuItem != null) {
+                    when (it) {
+                        true -> mMenuItem!!.setIcon(R.drawable.round_star_24)
+                        else -> mMenuItem!!.setIcon(R.drawable.round_star_border_24)
+                    }
+                }
+            }
+        )
 
         movieDetailsViewModel.movie.observe(
             viewLifecycleOwner,
@@ -56,21 +75,6 @@ class MovieDetailsFragment : Fragment() {
                 }
             }
         )
-
-        movieDetailsViewModel.favourite.observe(
-            viewLifecycleOwner,
-            { favourite ->
-                if (mMenuItem != null) {
-                    when (favourite) {
-                        true -> mMenuItem!!.setIcon(R.drawable.round_star_24)
-                        else -> mMenuItem!!.setIcon(R.drawable.round_star_border_24)
-                    }
-                }
-            }
-        )
-
-        setHasOptionsMenu(true)
-        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,7 +86,10 @@ class MovieDetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> findNavController().navigateUp()
-            R.id.favourite -> movieDetailsViewModel.changeFavourite()
+            R.id.favourite -> {
+                movieDetailsViewModel.changeFavourite()
+                saveFavouriteState()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -90,5 +97,9 @@ class MovieDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun saveFavouriteState() {
+        movieDetailsViewModel.saveFavouriteState()
     }
 }

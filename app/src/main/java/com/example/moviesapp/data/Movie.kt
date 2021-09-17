@@ -1,11 +1,14 @@
 package com.example.moviesapp.data
 
+import com.example.moviesapp.data.source.database.DatabaseFavourite
 import com.google.gson.annotations.SerializedName
 
 data class MovieGenre(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String
-)
+) {
+    override fun toString(): String = "$id: $name"
+}
 
 data class Movie(
     @SerializedName("id") val id: Int,
@@ -56,3 +59,6 @@ data class Movie(
         return result
     }
 }
+
+fun Movie.asDatabaseModel(): DatabaseFavourite =
+    DatabaseFavourite(id, title, poster_path, release_date, vote_average)

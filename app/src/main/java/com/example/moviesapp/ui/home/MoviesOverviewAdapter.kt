@@ -38,13 +38,16 @@ class MoviesOverviewAdapter(private val onClickListener: OnClickListener) : Recy
         private val tvScore: TextView = itemView.findViewById(R.id.item_movie_preview__tv_score)
 
         fun bind(movie: MovieOverview) {
-            tvTitle.text = movie.original_title
+            tvTitle.text = movie.title
             tvScore.text = movie.vote_average.toString()
 
             val imgUrl = IMAGE_BASE_URL + movie.poster_path
             val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
             Glide.with(ivPoster.context)
                 .load(imgUri)
+                .override(500, 500)
+                .placeholder(R.drawable.loading_placeholder)
+                .fitCenter()
                 .into(ivPoster)
         }
     }

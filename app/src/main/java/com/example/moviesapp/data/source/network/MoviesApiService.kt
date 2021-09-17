@@ -23,9 +23,9 @@ private val retrofit: Retrofit = Retrofit.Builder()
 
 interface MoviesApiService {
     @GET("movie/{id}")
-    suspend fun getMovie(@Path("id") id: String, @Query("api_key") api_key: String = API_KEY): Movie
+    suspend fun getMovie(@Path("id") id: Int, @Query("api_key") api_key: String = API_KEY): Movie
 
-    @GET("movie/latest")
+    @GET("movie/upcoming")
     suspend fun getLatest(@Query("api_key") api_key: String = API_KEY): MovieObject
 
     @GET("movie/now_playing")

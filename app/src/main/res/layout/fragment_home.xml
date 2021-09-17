@@ -1,45 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/fragment_home__tv_top_rated"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Top Rated"
-        android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="12dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_home__rv_top_rated"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/fragment_home__tv_top_rated"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp" />
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment">
 
-    <TextView
-        android:id="@+id/fragment_home__tv_popular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Popular"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/fragment_home__rv_top_rated"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="12dp"/>
+        <TextView
+            android:id="@+id/fragment_home__tv_top_rated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top Rated"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_home__rv_popular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/fragment_home__tv_popular"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="12dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_home__rv_top_rated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__tv_top_rated"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/fragment_home__tv_popular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Popular"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__rv_top_rated"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_home__rv_popular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__tv_popular"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/fragment_home__tv_latest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Latest"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__rv_popular"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_home__rv_latest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__tv_latest"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/fragment_home__tv_now_playing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upcoming"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__rv_latest"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="12dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_home__rv_now_playing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/fragment_home__tv_now_playing"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/fragment_home__pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
