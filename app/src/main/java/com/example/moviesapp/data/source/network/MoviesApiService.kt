@@ -36,6 +36,12 @@ interface MoviesApiService {
 
     @GET("movie/top_rated")
     suspend fun getTopRated(@Query("api_key") api_key: String = API_KEY): MovieObject
+
+    @GET("search/movie")
+    suspend fun searchMovies(
+        @Query("query") search: String,
+        @Query("api_key") api_key: String = API_KEY
+    ): MovieObject
 }
 
 object MoviesApi {

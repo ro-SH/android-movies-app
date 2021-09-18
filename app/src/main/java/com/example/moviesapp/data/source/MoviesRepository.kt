@@ -52,6 +52,17 @@ class MoviesRepository(private val database: MoviesDatabase) {
         it.asDomainModel()
     }
 
+    suspend fun searchMovies(search: String): List<MovieOverview>? {
+        var movies: List<MovieOverview>? = null
+        withContext(Dispatchers.IO) {
+            try {
+                movies = MoviesApi.retrofitService.searchMovies(search).results
+            } catch (t: Throwable) {}
+        }
+
+        return movies
+    }
+
     suspend fun getMovie(id: Int): Movie = MoviesApi.retrofitService.getMovie(id)
 
     suspend fun addToFavourites(movie: Movie) {

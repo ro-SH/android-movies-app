@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), ToolbarTitleListener {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.home_fragment, R.id.favourites_fragment, R.id.navigation_notifications
+                R.id.home_fragment, R.id.search_fragment, R.id.favourites_fragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -16,6 +16,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/search_fragment"
+        android:name="com.example.moviesapp.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/actionShowMovieDetails"
+            app:destination="@id/movie_details_fragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/favourites_fragment"
         android:name="com.example.moviesapp.ui.favourites.FavouritesFragment"
         android:label="@string/title_favourites"
@@ -25,11 +35,6 @@
             app:destination="@id/movie_details_fragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.moviesapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/movie_details_fragment"
         android:name="com.example.moviesapp.ui.movie_details.MovieDetailsFragment"

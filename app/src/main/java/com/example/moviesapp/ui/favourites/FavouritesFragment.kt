@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesapp.R
 import com.example.moviesapp.databinding.FragmentFavouritesBinding
+import com.example.moviesapp.ui.adapters.MoviesAdapter
 
 class FavouritesFragment : Fragment() {
 
@@ -21,8 +22,8 @@ class FavouritesFragment : Fragment() {
     private lateinit var favouritesViewModel: FavouritesViewModel
     private var _binding: FragmentFavouritesBinding? = null
 
-    private val favouritesAdapter = FavouritesAdapter(
-        FavouritesAdapter.OnClickListener {
+    private val favouritesAdapter = MoviesAdapter(
+        MoviesAdapter.OnClickListener {
             favouritesViewModel.displayMovieDetails(it.id)
         }
     )

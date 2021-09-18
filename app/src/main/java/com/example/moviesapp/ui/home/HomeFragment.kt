@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.databinding.FragmentHomeBinding
+import com.example.moviesapp.ui.adapters.MoviesOverviewAdapter
 
 class HomeFragment : Fragment() {
 
