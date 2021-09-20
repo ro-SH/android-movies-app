@@ -1,7 +1,6 @@
 package com.example.moviesapp.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.databinding.FragmentHomeBinding
 import com.example.moviesapp.ui.adapters.MoviesOverviewAdapter
+import com.google.android.material.snackbar.Snackbar
 
 class HomeFragment : Fragment() {
-
-    private val TAG = "HomeFragment"
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
@@ -67,6 +65,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.fragmentHomeSrlLayout.setOnRefreshListener {
+            homeViewModel.refreshCategories()
+            binding.fragmentHomeSrlLayout.isRefreshing = false
+        }
+
         homeViewModel.latest.observe(
             viewLifecycleOwner,
             { movies ->
@@ -99,7 +102,6 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner,
             {
                 if (it != null) {
-                    Log.i(TAG, "id: $it")
                     this.findNavController()
                         .navigate(HomeFragmentDirections.actionShowMovieDetails(it))
                     homeViewModel.displayMovieDetailsComplete()
@@ -107,26 +109,54 @@ class HomeFragment : Fragment() {
             }
         )
 
-        homeViewModel.loaded.observe(
+        homeViewModel.resultReady.observe(
             viewLifecycleOwner,
             {
-                binding.fragmentHomePbLoading.visibility = if (it) View.GONE else View.VISIBLE
-                binding.fragmentHomeTvPopular.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeTvTopRated.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeTvLatest.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeTvNowPlaying.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeRvPopular.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeRvTopRated.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeRvLatest.visibility = if (!it) View.GONE else View.VISIBLE
-                binding.fragmentHomeRvNowPlaying.visibility = if (!it) View.GONE else View.VISIBLE
+                setupVisibility(it)
             }
         )
+    }
+
+    private fun setupVisibility(result: Boolean?) {
+        val moviesFilled = checkMovies()
+
+        binding.fragmentHomeSrlLayout.isRefreshing = result == false
+
+        binding.fragmentHomeTvPopular.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeTvTopRated.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeTvLatest.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeTvNowPlaying.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeRvPopular.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeRvTopRated.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeRvLatest.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+        binding.fragmentHomeRvNowPlaying.visibility =
+            if (result != false && moviesFilled) View.VISIBLE else View.GONE
+
+        binding.fragmentHomeTvNoConnection.visibility =
+            if (result == null && !moviesFilled) View.VISIBLE else View.GONE
+
+        if (result == null && moviesFilled) {
+            Snackbar.make(
+                binding.fragmentHomeSrlLayout,
+                "No Internet connection.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun checkMovies() = !homeViewModel.popular.value.isNullOrEmpty()
 
     private fun setupRecyclerView() {
         // Top Rated RecyclerView

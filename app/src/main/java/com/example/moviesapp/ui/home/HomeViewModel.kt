@@ -1,21 +1,15 @@
 package com.example.moviesapp.ui.home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviesapp.data.MovieOverview
-import com.example.moviesapp.data.source.MoviesCategories
 import com.example.moviesapp.data.source.MoviesRepository
 import com.example.moviesapp.data.source.database.getDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class HomeViewModel(application: Application) : ViewModel() {
-    val TAG = "HomeViewModel"
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -35,27 +29,29 @@ class HomeViewModel(application: Application) : ViewModel() {
 
     val topRated: LiveData<List<MovieOverview>> = repository.topRated
 
-    private val _loaded = MutableLiveData<Boolean>()
-    val loaded: LiveData<Boolean>
-        get() = _loaded
+    private val _resultReady = MutableLiveData<Boolean?>()
+    val resultReady: LiveData<Boolean?>
+        get() = _resultReady
 
     init {
-        _loaded.value = false
-        getCategories()
+        _resultReady.value = false
+        setupCategories()
     }
 
-    private fun getCategories() {
-        var count = 0
+    private fun setupCategories() {
+        if (latest.value.isNullOrEmpty() || nowPlaying.value.isNullOrEmpty() ||
+            popular.value.isNullOrEmpty() || topRated.value.isNullOrEmpty()
+        ) {
+            refreshCategories()
+        } else {
+            _resultReady.value = true
+        }
+    }
+
+    fun refreshCategories() {
         coroutineScope.launch {
-            for (category in MoviesCategories.values()) {
-                Log.i(TAG, "$category")
-                if (repository.getCategory(category)) {
-                    count++
-                    Log.i(TAG, "+")
-                }
-            }
-            Log.i(TAG, "success count: $count")
-            if (count == MoviesCategories.values().size) _loaded.value = true
+            _resultReady.value = false
+            _resultReady.value = repository.refreshCategories()
         }
     }
 

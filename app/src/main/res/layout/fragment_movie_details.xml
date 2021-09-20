@@ -1,104 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_movie_details__srl_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="12dp"
-        tools:context=".ui.movie_details.MovieDetailsFragment">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/fragment_movie_details__iv_poster"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_launcher_background" />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_tagline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:ems="15"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="@id/fragment_movie_details__iv_poster"
-            app:layout_constraintEnd_toEndOf="@id/fragment_movie_details__iv_poster"
-            app:layout_constraintStart_toStartOf="@id/fragment_movie_details__iv_poster"
-            tools:text="Fear can hold you prisoner. Hope can set you free." />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_original_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:ems="18"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__iv_poster"
-            tools:text="Original title: The Shawshank Redemption" />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="18"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_original_title"
-            tools:text="1994, Drama, Crime" />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_run_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="18"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_info"
-            tools:text="142 mins" />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_average"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="18"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_run_time"
-            tools:text="Average: 8.7 Vote count: 19509" />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_overview_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="12dp"
-            android:text="Overview"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_average" />
-
-        <TextView
-            android:id="@+id/fragment_movie_details__tv_overview"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_overview_title"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            tools:text="Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope." />
+            android:paddingBottom="12dp"
+            tools:context=".ui.movie_details.MovieDetailsFragment">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <ImageView
+                android:id="@+id/fragment_movie_details__iv_poster"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher_background"
+                android:contentDescription="@string/movie_poster" />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_tagline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:ems="15"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="@id/fragment_movie_details__iv_poster"
+                app:layout_constraintEnd_toEndOf="@id/fragment_movie_details__iv_poster"
+                app:layout_constraintStart_toStartOf="@id/fragment_movie_details__iv_poster"
+                tools:text="Fear can hold you prisoner. Hope can set you free." />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_original_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:ems="18"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__iv_poster"
+                tools:text="Original title: The Shawshank Redemption" />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_original_title"
+                tools:text="1994, Drama, Crime" />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_run_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_info"
+                tools:text="142 mins" />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="18"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_run_time"
+                tools:text="Average: 8.7 Vote count: 19509" />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_overview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/overview"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_average" />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_overview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fragment_movie_details__tv_overview_title"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                tools:text="Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope." />
+
+            <TextView
+                android:id="@+id/fragment_movie_details__tv_no_connection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_internet_connection"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

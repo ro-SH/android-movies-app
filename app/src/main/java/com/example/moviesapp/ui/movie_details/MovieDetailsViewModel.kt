@@ -8,7 +8,10 @@ import com.example.moviesapp.data.Movie
 import com.example.moviesapp.data.source.MoviesRepository
 import com.example.moviesapp.data.source.database.MoviesDatabase
 import com.example.moviesapp.data.source.database.getDatabase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(application: Application, private val movieId: Int) : ViewModel() {
 
@@ -26,7 +29,12 @@ class MovieDetailsViewModel(application: Application, private val movieId: Int) 
     val favourite: LiveData<Boolean>
         get() = _favourite
 
+    private val _resultReady = MutableLiveData<Boolean>()
+    val resultReady: LiveData<Boolean>
+        get() = _resultReady
+
     init {
+        _resultReady.value = false
         setFavourite()
         getMovieDetails()
     }
@@ -41,13 +49,11 @@ class MovieDetailsViewModel(application: Application, private val movieId: Int) 
         }
     }
 
-    private fun getMovieDetails() {
+    fun getMovieDetails() {
         coroutineScope.launch {
-            try {
-                _movie.value = repository.getMovie(movieId)
-            } catch (t: Throwable) {
-                _movie.value = null
-            }
+            _resultReady.value = false
+            _movie.value = repository.getMovie(movieId)
+            _resultReady.value = true
         }
     }
 

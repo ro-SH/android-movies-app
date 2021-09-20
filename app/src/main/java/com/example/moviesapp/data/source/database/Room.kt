@@ -3,7 +3,6 @@ package com.example.moviesapp.data.source.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.TypeConverters
 import com.example.moviesapp.data.MovieGenre
 
 @Dao
@@ -36,7 +35,7 @@ interface MoviesDao {
 }
 
 // Database class
-@Database(entities = [DatabaseFavourite::class, DatabaseMovieOverview::class], version = 2)
+@Database(entities = [DatabaseFavourite::class, DatabaseMovieOverview::class], version = 3)
 @TypeConverters(Converters::class)
 abstract class MoviesDatabase : RoomDatabase() {
     abstract val moviesDao: MoviesDao
@@ -53,12 +52,13 @@ fun getDatabase(context: Context): MoviesDatabase {
                 context,
                 MoviesDatabase::class.java,
                 "Movies"
-            ).fallbackToDestructiveMigration().build()
+            ).build()
         }
         return DATABASE_INSTANCE
     }
 }
 
+// Type Converters
 class Converters {
     @TypeConverter
     fun fromGenres(genres: Array<MovieGenre>): String {

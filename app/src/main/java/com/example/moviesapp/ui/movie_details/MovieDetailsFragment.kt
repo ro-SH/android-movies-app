@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.moviesapp.*
+import com.example.moviesapp.data.Movie
 import com.example.moviesapp.data.source.network.IMAGE_BASE_URL
 import com.example.moviesapp.databinding.FragmentMovieDetailsBinding
 
@@ -35,12 +36,19 @@ class MovieDetailsFragment : Fragment() {
 
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
 
+        (activity as ToolbarTitleListener).updateTitle("")
+
         setHasOptionsMenu(true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.fragmentMovieDetailsSrlLayout.setOnRefreshListener {
+            movieDetailsViewModel.getMovieDetails()
+//            binding.fragmentMovieDetailsSrlLayout.isRefreshing = false
+        }
 
         movieDetailsViewModel.favourite.observe(
             viewLifecycleOwner,
@@ -54,27 +62,69 @@ class MovieDetailsFragment : Fragment() {
             }
         )
 
+        movieDetailsViewModel.resultReady.observe(
+            viewLifecycleOwner,
+            {
+                setupVisibility(movieDetailsViewModel.movie.value, it)
+            }
+        )
+
         movieDetailsViewModel.movie.observe(
             viewLifecycleOwner,
             {
-                it?.let { movie ->
-                    binding.fragmentMovieDetailsTvTagline.text = movie.tagline
-                    binding.fragmentMovieDetailsTvOriginalTitle.text = getOriginalTitleFromMovie(movie)
-                    binding.fragmentMovieDetailsTvInfo.text = getInfoFromMovie(movie)
-                    binding.fragmentMovieDetailsTvRunTime.text = getRunTimeFromMovie(movie)
-                    binding.fragmentMovieDetailsTvAverage.text = getAverageFromMovie(movie)
-                    binding.fragmentMovieDetailsTvOverview.text = movie.overview
-
-                    val imgUrl = IMAGE_BASE_URL + movie.poster_path
-                    val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-                    Glide.with(binding.fragmentMovieDetailsIvPoster.context)
-                        .load(imgUri)
-                        .into(binding.fragmentMovieDetailsIvPoster)
-
-                    (activity as ToolbarTitleListener).updateTitle(movie.title)
-                }
+//                setupVisibility(it, movieDetailsViewModel.resultReady.value!!)
+                setupInfo(it)
             }
         )
+    }
+
+    private fun setupInfo(it: Movie?) {
+        it?.let { movie ->
+            binding.fragmentMovieDetailsTvTagline.text = movie.tagline
+            binding.fragmentMovieDetailsTvOriginalTitle.text = getOriginalTitleFromMovie(movie)
+            binding.fragmentMovieDetailsTvInfo.text = getInfoFromMovie(movie)
+            binding.fragmentMovieDetailsTvRunTime.text = getRunTimeFromMovie(movie)
+            binding.fragmentMovieDetailsTvAverage.text = getAverageFromMovie(movie)
+            binding.fragmentMovieDetailsTvOverview.text = movie.overview
+
+            val imgUrl = IMAGE_BASE_URL + movie.poster_path
+            val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+            Glide.with(binding.fragmentMovieDetailsIvPoster.context)
+                .load(imgUri)
+                .override(500, 500)
+                .placeholder(R.drawable.loading_placeholder)
+                .fitCenter()
+                .into(binding.fragmentMovieDetailsIvPoster)
+
+            (activity as ToolbarTitleListener).updateTitle(movie.title)
+        }
+    }
+
+    private fun setupVisibility(it: Movie?, ready: Boolean) {
+        binding.fragmentMovieDetailsIvPoster.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+        binding.fragmentMovieDetailsTvTagline.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+        binding.fragmentMovieDetailsTvOriginalTitle.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+        binding.fragmentMovieDetailsTvInfo.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+        binding.fragmentMovieDetailsTvRunTime.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+        binding.fragmentMovieDetailsTvAverage.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+        binding.fragmentMovieDetailsTvOverview.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+
+        binding.fragmentMovieDetailsTvOverviewTitle.visibility =
+            if (it != null && ready) View.VISIBLE else View.GONE
+
+        binding.fragmentMovieDetailsTvNoConnection.visibility =
+            if (it == null && ready) View.VISIBLE else View.GONE
+
+        binding.fragmentMovieDetailsSrlLayout.isRefreshing = !ready
+//        binding.fragmentMovieDetailsPbLoading.visibility =
+//            if (!ready) View.VISIBLE else View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

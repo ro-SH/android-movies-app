@@ -63,7 +63,16 @@ class MoviesRepository(private val database: MoviesDatabase) {
         return movies
     }
 
-    suspend fun getMovie(id: Int): Movie = MoviesApi.retrofitService.getMovie(id)
+    suspend fun getMovie(id: Int): Movie? {
+        var movie: Movie? = null
+        withContext(Dispatchers.IO) {
+            try {
+                movie = MoviesApi.retrofitService.getMovie(id)
+            } catch (t: Throwable) {}
+        }
+
+        return movie
+    }
 
     suspend fun addToFavourites(movie: Movie) {
         withContext(Dispatchers.IO) {
@@ -87,28 +96,31 @@ class MoviesRepository(private val database: MoviesDatabase) {
         }
     }
 
-    suspend fun getCategory(category: MoviesCategories): Boolean {
+    suspend fun refreshCategories(): Boolean? {
 
-        var success = false
-        withContext(Dispatchers.IO) {
-            try {
-                val movies = when (category) {
-                    MoviesCategories.LATEST -> MoviesApi.retrofitService.getLatest().results
-                    MoviesCategories.NOW_PLAYING -> MoviesApi.retrofitService.getNowPlaying().results
-                    MoviesCategories.TOP_RATED -> MoviesApi.retrofitService.getTopRated().results
-                    MoviesCategories.POPULAR -> MoviesApi.retrofitService.getPopular().results
-                }
+        return withContext(Dispatchers.IO) {
+            var success: Boolean? = true
+            for (category in MoviesCategories.values()) {
+                try {
+                    val movies = when (category) {
+                        MoviesCategories.LATEST -> MoviesApi.retrofitService.getLatest().results
+                        MoviesCategories.NOW_PLAYING -> MoviesApi.retrofitService.getNowPlaying().results
+                        MoviesCategories.TOP_RATED -> MoviesApi.retrofitService.getTopRated().results
+                        MoviesCategories.POPULAR -> MoviesApi.retrofitService.getPopular().results
+                    }
 
-                if (movies.isNotEmpty()) {
-                    database.moviesDao.clearMovieOverviews(movieCategoryToString[category]!!)
-                    database.moviesDao.insertMovieOverviews(
-                        *movies.asDatabaseModel(movieCategoryToString[category]!!)
-                    )
-                    success = true
+                    if (movies.isNotEmpty()) {
+                        database.moviesDao.clearMovieOverviews(movieCategoryToString[category]!!)
+                        database.moviesDao.insertMovieOverviews(
+                            *movies.asDatabaseModel(movieCategoryToString[category]!!)
+                        )
+                    }
+                } catch (t: Throwable) {
+                    success = null
                 }
-            } catch (t: Throwable) {}
+            }
+
+            return@withContext success
         }
-
-        return success
     }
 }

@@ -20,8 +20,6 @@ import com.example.moviesapp.ui.adapters.MoviesAdapter
 
 class SearchFragment : Fragment() {
 
-    private val TAG = "SearchFragment"
-
     private val moviesAdapter = MoviesAdapter(
         MoviesAdapter.OnClickListener {
             hideKeyboard()
@@ -131,5 +129,10 @@ class SearchFragment : Fragment() {
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

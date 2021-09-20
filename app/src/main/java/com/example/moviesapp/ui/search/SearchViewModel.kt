@@ -14,8 +14,6 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(application: Application) : ViewModel() {
 
-    val TAG = "SearchViewModel"
-
     private val database = getDatabase(application)
     private val repository = MoviesRepository(database)
 
@@ -86,5 +84,10 @@ class SearchViewModel(application: Application) : ViewModel() {
 
     fun displayMovieDetailsComplete() {
         _navigateToSelectedMovie.value = null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
     }
 }

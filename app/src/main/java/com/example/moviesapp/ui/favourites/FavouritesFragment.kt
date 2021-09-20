@@ -17,8 +17,6 @@ import com.example.moviesapp.ui.adapters.MoviesAdapter
 
 class FavouritesFragment : Fragment() {
 
-    private val TAG = "FavouritesFragment"
-
     private lateinit var favouritesViewModel: FavouritesViewModel
     private var _binding: FragmentFavouritesBinding? = null
 
@@ -78,5 +76,10 @@ class FavouritesFragment : Fragment() {
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(dividerItemDecoration)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
