@@ -10,7 +10,7 @@ import com.example.moviesapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), ToolbarTitleListener {
-    private val TAG = "MainActivity"
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

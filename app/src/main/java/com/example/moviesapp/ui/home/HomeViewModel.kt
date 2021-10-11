@@ -1,6 +1,7 @@
 package com.example.moviesapp.ui.home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -52,6 +53,7 @@ class HomeViewModel(application: Application) : ViewModel() {
         coroutineScope.launch {
             _resultReady.value = false
             _resultReady.value = repository.refreshCategories()
+            Log.d("HomeViewModel", "curr result = ${_resultReady.value}, latest = ${latest.value!!.size} pop = ${popular.value!!.size}, top = ${topRated.value!!.size} now = ${nowPlaying.value!!.size}")
         }
     }
 

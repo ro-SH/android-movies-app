@@ -3,6 +3,11 @@ package com.example.moviesapp.data
 import com.example.moviesapp.data.source.database.DatabaseFavourite
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Movie genre data class for accessing movie genres.
+ * @property id genre id from TMDB
+ * @property name genre name from TMDB
+ */
 data class MovieGenre(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String
@@ -10,6 +15,20 @@ data class MovieGenre(
     override fun toString(): String = "$id: $name"
 }
 
+/**
+ * Movie data class for interacting with movie info from TMDb in the app.
+ * @property id movie id from TMDB
+ * @property title English movie title
+ * @property original_title original movie title
+ * @property overview text of movie overview
+ * @property genres array of MovieGenre
+ * @property poster_path poster path or null
+ * @property release_date
+ * @property runtime movie runtime or null
+ * @property tagline movie tagline or null
+ * @property vote_average average movie score
+ * @property vote_count number of votes
+ */
 data class Movie(
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,
@@ -60,5 +79,9 @@ data class Movie(
     }
 }
 
+/**
+ * Convert Movie to DatabaseFavourite for saving in database.
+ * @return movie converted to DataBaseFavourite
+ */
 fun Movie.asDatabaseModel(): DatabaseFavourite =
     DatabaseFavourite(id, title, poster_path, release_date, vote_average)

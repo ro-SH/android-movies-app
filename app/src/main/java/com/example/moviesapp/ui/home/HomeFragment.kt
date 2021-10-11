@@ -156,7 +156,10 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun checkMovies() = !homeViewModel.popular.value.isNullOrEmpty()
+    private fun checkMovies() = !homeViewModel.popular.value.isNullOrEmpty() ||
+        !homeViewModel.topRated.value.isNullOrEmpty() ||
+        !homeViewModel.nowPlaying.value.isNullOrEmpty() ||
+        !homeViewModel.latest.value.isNullOrEmpty()
 
     private fun setupRecyclerView() {
         // Top Rated RecyclerView

@@ -12,8 +12,13 @@ import com.example.moviesapp.R
 import com.example.moviesapp.data.MovieOverview
 import com.example.moviesapp.data.source.network.IMAGE_BASE_URL
 
+/**
+ * RecyclerView adapter for list of movie overviews.
+ * @property onClickListener OnClickListener with action on item press
+ */
 class MoviesOverviewAdapter(private val onClickListener: OnClickListener) : RecyclerView.Adapter<MoviesOverviewAdapter.ViewHolder>() {
 
+    // Movies to show in RecyclerView
     private var movies = emptyList<MovieOverview>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,11 +57,19 @@ class MoviesOverviewAdapter(private val onClickListener: OnClickListener) : Recy
         }
     }
 
+    /**
+     * Change [movies] with [newMovies].
+     * @param newMovies list of movie overviews
+     */
     fun setData(newMovies: List<MovieOverview>) {
         movies = newMovies
         notifyDataSetChanged()
     }
 
+    /**
+     * Class for processing on click.
+     * @param onClickListener function to execute
+     */
     class OnClickListener(private val onClickListener: (movie: MovieOverview) -> Unit) {
         fun onClick(movie: MovieOverview) = onClickListener(movie)
     }

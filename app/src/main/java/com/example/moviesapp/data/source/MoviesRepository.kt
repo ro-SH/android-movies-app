@@ -9,10 +9,14 @@ import com.example.moviesapp.data.source.network.MoviesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/**
+ * Enum class of Movies categories.
+ */
 enum class MoviesCategories {
     LATEST, NOW_PLAYING, TOP_RATED, POPULAR
 }
 
+// MoviesCategories converted to string
 private val movieCategoryToString = mapOf(
     MoviesCategories.LATEST to LATEST,
     MoviesCategories.NOW_PLAYING to NOW_PLAYING,
@@ -20,38 +24,52 @@ private val movieCategoryToString = mapOf(
     MoviesCategories.POPULAR to POPULAR
 )
 
+/**
+ * Movies repository for interacting with TMDB Api and Database.
+ * @property database instance of MoviesDatabase
+ */
 class MoviesRepository(private val database: MoviesDatabase) {
 
+    // LiveData of List of Upcoming movies from [database]
     val latest: LiveData<List<MovieOverview>> = Transformations.map(
         database.moviesDao.getMovieOverviews(LATEST)
     ) {
         it.asDomainModel()
     }
 
+    // LiveData of List of Now Playing movies from [database]
     val nowPlaying: LiveData<List<MovieOverview>> = Transformations.map(
         database.moviesDao.getMovieOverviews(NOW_PLAYING)
     ) {
         it.asDomainModel()
     }
 
+    // LiveData of List of Popular movies from [database]
     val popular: LiveData<List<MovieOverview>> = Transformations.map(
         database.moviesDao.getMovieOverviews(POPULAR)
     ) {
         it.asDomainModel()
     }
 
+    // LiveData of List of Top Rated movies from [database]
     val topRated: LiveData<List<MovieOverview>> = Transformations.map(
         database.moviesDao.getMovieOverviews(TOP_RATED)
     ) {
         it.asDomainModel()
     }
 
+    // LiveData of List of Favourite movies from [database]
     val favourites: LiveData<List<MovieOverview>> = Transformations.map(
         database.moviesDao.getFavourites()
     ) {
         it.asDomainModel()
     }
 
+    /**
+     * Get movies from TMDB by query [search].
+     * @param search query for seach
+     * @return List of found movies or null
+     */
     suspend fun searchMovies(search: String): List<MovieOverview>? {
         var movies: List<MovieOverview>? = null
         withContext(Dispatchers.IO) {
@@ -63,6 +81,11 @@ class MoviesRepository(private val database: MoviesDatabase) {
         return movies
     }
 
+    /**
+     * Get movie from TMDB by [id].
+     * @param id movie id
+     * @return movie or null
+     */
     suspend fun getMovie(id: Int): Movie? {
         var movie: Movie? = null
         withContext(Dispatchers.IO) {
@@ -74,12 +97,21 @@ class MoviesRepository(private val database: MoviesDatabase) {
         return movie
     }
 
+    /**
+     * Add movie to favourites.
+     * @param movie
+     */
     suspend fun addToFavourites(movie: Movie) {
         withContext(Dispatchers.IO) {
             database.moviesDao.insertMovie(movie.asDatabaseModel())
         }
     }
 
+    /**
+     * Returns if movie by [movieId] is in [database].
+     * @param movieId
+     * @return true if it is [database] else false
+     */
     suspend fun isFavourite(movieId: Int): Boolean {
         var result = false
         withContext(Dispatchers.IO) {
@@ -90,12 +122,20 @@ class MoviesRepository(private val database: MoviesDatabase) {
         return result
     }
 
+    /**
+     * Delete [movie] from favourites in [database].
+     * @param movie
+     */
     suspend fun deleteFromFavourites(movie: Movie) {
         withContext(Dispatchers.IO) {
             database.moviesDao.deleteMovie(movie.id)
         }
     }
 
+    /**
+     * Get all of categories from TMDB and inserting movies to [database]
+     * @return true if success else null
+     */
     suspend fun refreshCategories(): Boolean? {
 
         return withContext(Dispatchers.IO) {
