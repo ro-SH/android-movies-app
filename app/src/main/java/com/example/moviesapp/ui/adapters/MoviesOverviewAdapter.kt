@@ -5,12 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.moviesapp.R
 import com.example.moviesapp.data.MovieOverview
-import com.example.moviesapp.data.source.network.IMAGE_BASE_URL
+import com.example.moviesapp.getScoreBackground
+import com.example.moviesapp.loadOverviewPoster
 
 /**
  * RecyclerView adapter for list of movie overviews.
@@ -44,16 +43,11 @@ class MoviesOverviewAdapter(private val onClickListener: OnClickListener) : Recy
 
         fun bind(movie: MovieOverview) {
             tvTitle.text = movie.title
-            tvScore.text = movie.vote_average.toString()
-
-            val imgUrl = IMAGE_BASE_URL + movie.poster_path
-            val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-            Glide.with(ivPoster.context)
-                .load(imgUri)
-                .override(500, 500)
-                .placeholder(R.drawable.loading_placeholder)
-                .fitCenter()
-                .into(ivPoster)
+            tvScore.apply {
+                text = movie.vote_average.toString()
+                setBackgroundColor(getScoreBackground(movie.vote_average))
+            }
+            ivPoster.loadOverviewPoster(movie.poster_path)
         }
     }
 

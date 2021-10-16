@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviesapp.databinding.FragmentHomeBinding
+import com.example.moviesapp.ui.adapters.DefaultItemDecorator
 import com.example.moviesapp.ui.adapters.MoviesOverviewAdapter
 import com.google.android.material.snackbar.Snackbar
 
@@ -163,19 +164,35 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         // Top Rated RecyclerView
-        binding.fragmentHomeRvTopRated.adapter = topRatedAdapter
-        binding.fragmentHomeRvTopRated.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentHomeRvTopRated.apply {
+            adapter = topRatedAdapter
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(DefaultItemDecorator(36, 36, 1))
+        }
 
         // Popular Recycler View
-        binding.fragmentHomeRvPopular.adapter = popularAdapter
-        binding.fragmentHomeRvPopular.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentHomeRvPopular.apply {
+            adapter = popularAdapter
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(DefaultItemDecorator(36, 36, 1))
+        }
 
         // Latest Recycler View
-        binding.fragmentHomeRvLatest.adapter = latestAdapter
-        binding.fragmentHomeRvLatest.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentHomeRvLatest.apply {
+            adapter = latestAdapter
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(DefaultItemDecorator(36, 36, 1))
+        }
 
         // Now Playing Recycler View
-        binding.fragmentHomeRvNowPlaying.adapter = nowPlayingAdapter
-        binding.fragmentHomeRvNowPlaying.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.fragmentHomeRvNowPlaying.apply {
+            adapter = nowPlayingAdapter
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(DefaultItemDecorator(36, 36, 1))
+        }
     }
 }

@@ -5,17 +5,14 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.moviesapp.R
 import com.example.moviesapp.databinding.FragmentSearchBinding
 import com.example.moviesapp.hideKeyboard
+import com.example.moviesapp.ui.adapters.DefaultItemDecorator
 import com.example.moviesapp.ui.adapters.MoviesAdapter
 
 class SearchFragment : Fragment() {
@@ -96,6 +93,8 @@ class SearchFragment : Fragment() {
 
         binding.fragmentSearchEtSearch.doOnTextChanged { text, _, _, _ ->
             searchViewModel.searchMovies(text.toString())
+            if (binding.fragmentSearchRvResult.adapter?.itemCount != 0)
+                binding.fragmentSearchRvResult.scrollToPosition(0)
         }
 
         binding.fragmentSearchEtSearch.setOnKeyListener { _, keyCode, event ->
@@ -121,13 +120,11 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)!!)
         binding.fragmentSearchRvResult.apply {
             adapter = moviesAdapter
             layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(dividerItemDecoration)
+            addItemDecoration(DefaultItemDecorator(36, 24))
         }
     }
 

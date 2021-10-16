@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.moviesapp.R
 import com.example.moviesapp.databinding.FragmentFavouritesBinding
+import com.example.moviesapp.ui.adapters.DefaultItemDecorator
 import com.example.moviesapp.ui.adapters.MoviesAdapter
 
 class FavouritesFragment : Fragment() {
@@ -68,13 +65,11 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.rv_divider)!!)
         binding.fragmentFavouritesRvFavourites.apply {
             adapter = favouritesAdapter
             layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(dividerItemDecoration)
+            addItemDecoration(DefaultItemDecorator(36, 24))
         }
     }
 

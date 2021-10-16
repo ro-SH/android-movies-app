@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="Movie Title"
+        android:hint="@string/movie_title"
         app:startIconDrawable="@drawable/baseline_search_24"
         app:endIconDrawable="@drawable/outline_clear_24"
         app:endIconMode="clear_text"
@@ -21,6 +21,9 @@
             android:id="@+id/fragment_search__et_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/helvetica_regular"
+            android:textSize="14sp"
+            android:textColor="@color/primary_text_color"
             android:imeOptions="actionSearch"
             android:inputType="textShortMessage" />
 
@@ -30,16 +33,16 @@
         android:id="@+id/fragment_search__rv_result"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_search__tl_search" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_search__tl_search"
+        android:overScrollMode="never"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/fragment_search__pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:indicatorColor="@color/primary_text_color"
         android:indeterminate="true"
         app:layout_constraintTop_toBottomOf="@id/fragment_search__tl_search"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +53,7 @@
         android:id="@+id/fragment_search__tv_empty_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Such Movies."
+        android:text="@string/no_such_movies"
         app:layout_constraintTop_toBottomOf="@id/fragment_search__tl_search"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="12dp"/>
@@ -59,7 +62,7 @@
         android:id="@+id/fragment_search__tv_no_connection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Internet Connection."
+        android:text="@string/no_internet_connection"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

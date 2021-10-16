@@ -18,9 +18,6 @@ class FavouritesViewModel(application: Application) : ViewModel() {
     val navigateToSelectedMovie: LiveData<Int?>
         get() = _navigateToSelectedMovie
 
-    fun deleteFavourite(id: Int) {
-    }
-
     fun displayMovieDetails(movieId: Int) {
         _navigateToSelectedMovie.value = movieId
     }

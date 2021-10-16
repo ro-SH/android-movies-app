@@ -47,7 +47,6 @@ class MovieDetailsFragment : Fragment() {
 
         binding.fragmentMovieDetailsSrlLayout.setOnRefreshListener {
             movieDetailsViewModel.getMovieDetails()
-//            binding.fragmentMovieDetailsSrlLayout.isRefreshing = false
         }
 
         movieDetailsViewModel.favourite.observe(
@@ -69,32 +68,34 @@ class MovieDetailsFragment : Fragment() {
             }
         )
 
-        movieDetailsViewModel.movie.observe(
-            viewLifecycleOwner,
-            {
-//                setupVisibility(it, movieDetailsViewModel.resultReady.value!!)
-                setupInfo(it)
-            }
-        )
+        movieDetailsViewModel.movie.observe(viewLifecycleOwner, { setupInfo(it) })
     }
 
     private fun setupInfo(it: Movie?) {
         it?.let { movie ->
-            binding.fragmentMovieDetailsTvTagline.text = movie.tagline
+            binding.fragmentMovieDetailsTvTitle.text = movie.title
+            binding.fragmentMovieDetailsTvTagline.text = getTaglineFromMovie(movie)
             binding.fragmentMovieDetailsTvOriginalTitle.text = getOriginalTitleFromMovie(movie)
-            binding.fragmentMovieDetailsTvInfo.text = getInfoFromMovie(movie)
+            binding.fragmentMovieDetailsTvGenres.text = getGenresFromMovie(movie)
             binding.fragmentMovieDetailsTvRunTime.text = getRunTimeFromMovie(movie)
-            binding.fragmentMovieDetailsTvAverage.text = getAverageFromMovie(movie)
             binding.fragmentMovieDetailsTvOverview.text = movie.overview
+            binding.fragmentMovieDetailsTvVotes.text = getVotesFromMovie(movie)
 
-            val imgUrl = IMAGE_BASE_URL + movie.poster_path
-            val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
-            Glide.with(binding.fragmentMovieDetailsIvPoster.context)
-                .load(imgUri)
-                .override(500, 500)
-                .placeholder(R.drawable.loading_placeholder)
-                .fitCenter()
-                .into(binding.fragmentMovieDetailsIvPoster)
+            binding.fragmentMovieDetailsTvScore.apply {
+                text = movie.vote_average.toString()
+                setBackgroundColor(getScoreBackground(movie.vote_average))
+            }
+
+            binding.fragmentMovieDetailsIvPoster.apply {
+                val imgUrl = IMAGE_BASE_URL + movie.poster_path
+                val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+                Glide.with(this.context)
+                    .load(imgUri)
+                    .override(500, 500)
+                    .placeholder(R.drawable.loading_placeholder)
+                    .fitCenter()
+                    .into(this)
+            }
 
             (activity as ToolbarTitleListener).updateTitle(movie.title)
         }
@@ -107,11 +108,11 @@ class MovieDetailsFragment : Fragment() {
             if (it != null && ready) View.VISIBLE else View.GONE
         binding.fragmentMovieDetailsTvOriginalTitle.visibility =
             if (it != null && ready) View.VISIBLE else View.GONE
-        binding.fragmentMovieDetailsTvInfo.visibility =
+        binding.fragmentMovieDetailsTvGenres.visibility =
             if (it != null && ready) View.VISIBLE else View.GONE
         binding.fragmentMovieDetailsTvRunTime.visibility =
             if (it != null && ready) View.VISIBLE else View.GONE
-        binding.fragmentMovieDetailsTvAverage.visibility =
+        binding.fragmentMovieDetailsCvScore.visibility =
             if (it != null && ready) View.VISIBLE else View.GONE
         binding.fragmentMovieDetailsTvOverview.visibility =
             if (it != null && ready) View.VISIBLE else View.GONE

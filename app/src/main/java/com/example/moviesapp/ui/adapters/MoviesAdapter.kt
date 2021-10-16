@@ -1,12 +1,17 @@
 package com.example.moviesapp.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesapp.R
 import com.example.moviesapp.data.MovieOverview
+import com.example.moviesapp.getScoreBackground
+import com.example.moviesapp.getYearFromMovie
+import com.example.moviesapp.loadOverviewPoster
 
 /**
  * RecyclerView adapter for list of movies.
@@ -40,11 +45,19 @@ class MoviesAdapter(private val onClickListener: OnClickListener) : RecyclerView
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val tvTitle: TextView = itemView.findViewById(R.id.item_movie__tv_title)
+        private val tvYear: TextView = itemView.findViewById(R.id.item_movie__tv_year)
         private val tvAverage: TextView = itemView.findViewById(R.id.item_movie__tv_average)
+        private val ivPoster: ImageView = itemView.findViewById(R.id.item_movie__iv_poster)
 
         fun bind(movie: MovieOverview) {
             tvTitle.text = movie.title
-            tvAverage.text = movie.vote_average.toString()
+            tvAverage.apply {
+                text = movie.vote_average.toString()
+                setBackgroundColor(getScoreBackground(movie.vote_average))
+            }
+            Log.d("adapter", "movie $movie")
+            tvYear.text = getYearFromMovie(movie)
+            ivPoster.loadOverviewPoster(movie.poster_path)
         }
     }
 
