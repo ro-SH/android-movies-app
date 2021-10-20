@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moviesapp.BottomNavListener
 import com.example.moviesapp.databinding.FragmentHomeBinding
 import com.example.moviesapp.ui.adapters.DefaultItemDecorator
 import com.example.moviesapp.ui.adapters.MoviesOverviewAdapter
@@ -57,6 +58,8 @@ class HomeFragment : Fragment() {
         val viewModelFactory = HomeViewModelFactory(requireActivity().application)
         homeViewModel =
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+
+        (activity as BottomNavListener).updateBottomNavVisibility()
 
         setupRecyclerView()
 

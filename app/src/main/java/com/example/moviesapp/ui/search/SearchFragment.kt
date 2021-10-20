@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moviesapp.BottomNavListener
 import com.example.moviesapp.databinding.FragmentSearchBinding
 import com.example.moviesapp.hideKeyboard
 import com.example.moviesapp.ui.adapters.DefaultItemDecorator
@@ -40,6 +41,8 @@ class SearchFragment : Fragment() {
         val viewModelFactory = SearchViewModelFactory(requireActivity().application)
         searchViewModel =
             ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
+
+        (activity as BottomNavListener).updateBottomNavVisibility()
 
         setupRecyclerView()
 

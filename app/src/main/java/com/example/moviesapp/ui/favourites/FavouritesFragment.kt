@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moviesapp.BottomNavListener
 import com.example.moviesapp.databinding.FragmentFavouritesBinding
 import com.example.moviesapp.ui.adapters.DefaultItemDecorator
 import com.example.moviesapp.ui.adapters.MoviesAdapter
@@ -36,6 +37,8 @@ class FavouritesFragment : Fragment() {
         val viewModelFactory = FavouritesViewModelFactory(requireActivity().application)
         favouritesViewModel =
             ViewModelProvider(this, viewModelFactory).get(FavouritesViewModel::class.java)
+
+        (activity as BottomNavListener).updateBottomNavVisibility()
 
         setupRecyclerView()
 

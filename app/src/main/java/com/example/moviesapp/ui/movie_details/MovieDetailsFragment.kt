@@ -37,6 +37,7 @@ class MovieDetailsFragment : Fragment() {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
 
         (activity as ToolbarTitleListener).updateTitle("")
+        (activity as BottomNavListener).updateBottomNavVisibility(false)
 
         setHasOptionsMenu(true)
         return binding.root
